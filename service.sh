@@ -8,7 +8,7 @@ if [[ "$1" == "dns" || "$1" == "web" ]] && [[ "$2" == "create" || "$2" == "remov
     CONTAINER_ID=$(docker ps -aq -f name=$CONTAINER_NOME)
     CONTAINER_STATE=$(docker ps -q -f name=$CONTAINER_NOME -f status=running)
 
-    # Criar imagem
+    # Cria imagem
     if [[ "$2" == "create" && "$3" == "image" ]]; then
         if [[ -n $IMAGEM_ID ]]; then
             echo "Já existe uma imagem com o repositório: $IMAGEM_NOME"
@@ -16,7 +16,7 @@ if [[ "$1" == "dns" || "$1" == "web" ]] && [[ "$2" == "create" || "$2" == "remov
             docker build -t $IMAGEM_NOME $1/
         fi
 
-    # Criar container
+    # Cria container
     elif [[ "$2" == "create" && "$3" == "container" ]]; then
         if [[ -n $IMAGEM_ID ]]; then
             if [[ -n $CONTAINER_ID ]]; then
@@ -32,49 +32,53 @@ if [[ "$1" == "dns" || "$1" == "web" ]] && [[ "$2" == "create" || "$2" == "remov
             echo "É necessário ter uma imagem $IMAGEM_NOME para criar o container."
         fi
 
-    # Remover imagem
+    # Remove imagem
     elif [[ "$2" == "remove" && "$3" == "image" ]]; then
-        if [[ -n $IMAGEM_ID ]]; then
-            docker rmi $IMAGEM_ID
+        if [[ -z $CONTAINER_ID ]]; then
+            if [[ -n $IMAGEM_ID ]]; then
+                docker rmi $IMAGEM_ID
+            else
+                echo "A imagem $IMAGEM_NOME não existe."
+            fi
         else
-            echo "A imagem $IMAGEM_NOME não existe."
+            echo "A imagem está sendo usada por um container, não é possível apaga-la."
         fi
 
-    # Remover container
+    # Remove container
     elif [[ "$2" == "remove" && "$3" == "container" ]]; then
         if [[ -n $CONTAINER_ID ]]; then
-	    if [[ -z $CONTAINER_STATE ]]; then
+            if [[ -z $CONTAINER_STATE ]]; then
                 docker rm $CONTAINER_ID
-	    else
-		echo "O container $CONTAINER_NOME precisa estar parado para ser removido."
-	    fi
+            else
+                echo "O container $CONTAINER_NOME precisa estar parado para ser removido."
+            fi
         else
             echo "O container $CONTAINER_NOME não existe."
         fi
 
-    # Parar container
+    # Para container
     elif [[ "$2" == "stop" ]]; then
         if [[ -n $CONTAINER_ID ]]; then
-	    if [[ -n $CONTAINER_STATE ]]; then
+            if [[ -n $CONTAINER_STATE ]]; then
                 docker stop $CONTAINER_ID
-	    else
-	        echo "O container $CONTAINER_NOME já está parado."
-	    fi
+            else
+                echo "O container $CONTAINER_NOME já está parado."
+            fi
         else
             echo "O container $CONTAINER_NOME não existe."
         fi
 
-    # Iniciar container
+    # Inicia container
     elif [[ "$2" == "start" ]]; then
-	if [[ -n $CONTAINER_ID ]];then
-	    if [[ -z $CONTAINER_STATE ]]; then
-	        docker start $CONTAINER_ID
-	    else
-	        echo "O container $CONTAINER_NOME já está rodando."
-	    fi
+        if [[ -n $CONTAINER_ID ]]; then
+            if [[ -z $CONTAINER_STATE ]]; then
+                docker start $CONTAINER_ID
+            else
+                echo "O container $CONTAINER_NOME já está rodando."
+            fi
         else
             echo "O container $CONTAINER_NOME não existe."
-	fi
+        fi
     fi
 
 else

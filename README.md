@@ -1,17 +1,26 @@
-docker build -t ubuntu-bind dns/
-docker build -t nginx web/
+Aqui eu explico o funcionamento dos parametros para usar meu script
+que automatiza a manipulação e criação de imagens e containers no docker.
 
-docker run -d -p 53:53/udp -p 53:53/tcp --name bind9 ubuntu-bind
-docker run -d -p 80:80/tcp --name web nginx
+Mas antes, certifique-se de alterar a seguinte linha de codigo no arquivo "db.asa.br"
 
-docker container cp bind9:/etc/bind/db.local .
-docker container cp bind:/etc/bind/named.conf.local
+Linha 14:   www   IN   A   192.168.1.10
 
-docker container exec -it web bash
-nslookup www.asa.br 127.0.0.1
+O IP "192.168.1.10" deve ser alterado para o IP da sua maquina, que esteja conectado ao cabo Ethernet ou a rede Wi-fi.
 
-git config --global user.name "Wellton" 
-git config --global user.email welltongabrielkkj19@gmail.com
+O script "service.sh" pode receber 3 argumentos:
+Argumento $1: dns ou web (Serviços)
+Argumento $2: create, remove, stop ou start (Ações)
+Argumento $3: image ou container (esses argumentos auxiliam as ações: create e remove)
 
- docker container exec -it web bash
-/usr/share/nginx/html
+Exemplo de uso:
+
+./service.sh dns create image       (cria a imagem do repositorio ubuntu-bind)
+./service.sh dns create container   (cria o container bind9 com a imagem ubuntu-bind)
+
+./service.sh dns remove image       (remove a imagem se não estiver sendo usada por um container)
+./service.sh dns remove container   (remove o container se estiver parado)
+
+./service.sh dns stop               (para o container)
+./service.sh dns start              (inicia o container)
+
+Se quiser usar os codigos acima no serviço web, altere o argumento $1 para "web"
