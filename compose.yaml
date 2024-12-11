@@ -1,12 +1,11 @@
 services:
   dns:
     build:
-      context: ./dns
+      context: ./proxy
       dockerfile: Dockerfile
-    container_name: bind9
+    container_name: proxy
     ports:
-      - "53:53/tcp"
-      - "53:53/udp"
+      - "80:80/tcp"
 
   web:
     build:
@@ -14,4 +13,4 @@ services:
       dockerfile: Dockerfile
     container_name: web-server
     ports:
-      - "80:80/tcp"
+      - "81:80/tcp"

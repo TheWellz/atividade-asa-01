@@ -13,3 +13,4 @@ $TTL	604800
 @			IN		A		10.25.2.0
 www 		IN  	A   	10.25.2.0
 portal  	IN  	CNAME  	www
+wellton	 	IN 		CNAME 	www
