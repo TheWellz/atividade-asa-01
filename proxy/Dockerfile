@@ -1,7 +1,13 @@
 FROM nginx:latest
 
+# Copia a configuracao do servidor
 COPY default.conf /etc/nginx/conf.d/
-COPY 404.html /usr/share/nginx/html/
 
-RUN mkdir -p /usr/share/nginx/wellton
-COPY index.html /usr/share/nginx/wellton
+# Copia uma pagina de erro personalizada
+#COPY 404.html /usr/share/nginx/html/
+
+# Cria o diretorio para o site personalizado
+#RUN mkdir -p /usr/share/nginx/wellton
+
+# Copia pagina/site personalizada
+#COPY index.html /usr/share/nginx/wellton

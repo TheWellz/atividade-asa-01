@@ -1,6 +1,3 @@
-;
-; BIND data file for asa.br zone
-;
 $TTL	604800
 @	IN	SOA	ns.asa.br. root.asa.br. (
 			      1		; Serial
@@ -10,7 +7,8 @@ $TTL	604800
 			 604800 )	; Negative Cache TTL
 ;
 @			IN		NS		ns.
-@			IN		A		10.25.2.0
-www 		IN  	A   	10.25.2.0
+@			IN		A		10.24.21.44
+www 		IN  	A   	10.24.21.44
+www 		IN  	A   	10.24.21.45
 portal  	IN  	CNAME  	www
 wellton	 	IN 		CNAME 	www
